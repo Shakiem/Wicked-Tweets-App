@@ -34,6 +34,8 @@ The following **bonus** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
+[Link to GIF Walkthrough](http://i.imgur.com/4aozcjp.gif)
+
 <img src='http://i.imgur.com/4aozcjp.gif' title='Wicked Tweets App Video Walkthrough' width='337' height='646' alt='Wicked Tweets App Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
