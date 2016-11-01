@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WickedTweetsApp</string>
+    <string name="login_label">Connect to Twitter</string>
+    <string name="time_line_name">Tweet Timeline</string>
+    <string name="compose_tweet">Compose Tweet</string>
+    <string name="what_s_on_your_mind">What\'s on your mind?</string>
+    <string name="tweet">Tweet</string>
+    <string name="cancel">Cancel</string>
+    <string name="_140">140</string>
+    <string name="screen_name">screen_name</string>
+    <string name="firstname_lastname">Firstname Lastname</string>
+    <string name="twitter_app">Twitter App</string>
+    <string name="wicked">Wicked</string>
+    <string name="app_logo">App Logo</string>
+
+</resources>

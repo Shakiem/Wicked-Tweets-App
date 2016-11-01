@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_gravity="center">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/dialogToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="?attr/actionBarTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/orange"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_compose_tweet"/>
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/compose_tweet"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:maxLines="1"/>
+        </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/currentUserProfileImage"
+        android:layout_below="@+id/dialogToolbar"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/default_profile_image"
+        />
+
+    <TextView
+        android:id="@+id/currentUserName"
+        android:layout_toRightOf="@+id/currentUserProfileImage"
+        android:layout_below="@+id/dialogToolbar"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstname_lastname"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/currentUserScreenName"
+        android:layout_toRightOf="@+id/currentUserProfileImage"
+        android:layout_below="@+id/currentUserName"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/screen_name"/>
+
+
+
+    <EditText
+        android:id="@+id/tweetTextBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/currentUserProfileImage"
+        android:layout_marginTop="5dp"
+        android:inputType="textMultiLine"
+        android:gravity="top|left"
+        android:minLines="4"
+        android:background="@drawable/text_box"
+        android:padding="5dp"
+        android:hint="@string/what_s_on_your_mind" />
+
+    <Button
+        android:id="@+id/tweetButton"
+        android:layout_below="@+id/tweetTextBox"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tweet"
+        android:background="@drawable/orange_button"
+        android:textColor="@color/white"
+        />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_below="@+id/tweetTextBox"
+        android:layout_toLeftOf="@+id/tweetButton"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_button"
+        android:textColor="@color/orange"
+        android:text="@string/cancel"
+        />
+
+    <TextView
+        android:id="@+id/charsLeft"
+        android:layout_below="@+id/tweetTextBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_140"/>
+
+
+</RelativeLayout>
