@@ -5,6 +5,7 @@
     <string name="login_label">Connect to Twitter</string>
     <string name="time_line_name">Tweet Timeline</string>
     <string name="compose_tweet">Compose Tweet</string>
+    <string name="profile">Profile</string>
     <string name="what_s_on_your_mind">What\'s on your mind?</string>
     <string name="tweet">Tweet</string>
     <string name="cancel">Cancel</string>

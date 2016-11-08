@@ -1,6 +1,7 @@
 package com.shakiemsaunders.wickedTweetsApp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shakiemsaunders.wickedTweetsApp.R;
+import com.shakiemsaunders.wickedTweetsApp.activities.ProfileActivity;
 import com.shakiemsaunders.wickedTweetsApp.models.Tweet;
 import com.shakiemsaunders.wickedTweetsApp.transformations.CircleTransform;
 import com.squareup.picasso.Picasso;
@@ -31,7 +33,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
         TweetHolder holder;
 
         if(convertView == null){
@@ -60,6 +62,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 .transform(new CircleTransform())
                 .placeholder(R.drawable.default_profile_image)
                 .into(holder.profileImage);
+
+
+        holder.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                profileIntent.putExtra("user", tweet.getUser());
+                getContext().startActivity(profileIntent);
+            }
+        });
 
         return convertView;
     }

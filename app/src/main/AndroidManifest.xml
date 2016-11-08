@@ -35,7 +35,8 @@
         </activity>
         <activity
             android:name=".activities.TimeLineActivity"
-            android:label="@string/time_line_name"/>
+            android:label="@string/time_line_name" />
+        <activity android:name=".activities.ProfileActivity"></activity>
     </application>
 
 </manifest>

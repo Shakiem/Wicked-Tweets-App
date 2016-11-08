@@ -7,4 +7,9 @@
         android:title="@string/compose_tweet"
         android:icon="@drawable/ic_compose_tweet"
         app:showAsAction="always"/>
+    <item android:id="@+id/action_profile"
+        android:orderInCategory="1"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="always"/>
 </menu>

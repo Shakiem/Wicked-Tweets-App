@@ -1,38 +1,40 @@
 package com.shakiemsaunders.wickedTweetsApp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.shakiemsaunders.wickedTweetsApp.R;
 import com.shakiemsaunders.wickedTweetsApp.TwitterApplication;
 import com.shakiemsaunders.wickedTweetsApp.TwitterClient;
-import com.shakiemsaunders.wickedTweetsApp.adapters.TweetsArrayAdapter;
 import com.shakiemsaunders.wickedTweetsApp.fragments.ComposeTweetFragment;
-import com.shakiemsaunders.wickedTweetsApp.listeners.EndlessScrollListener;
+import com.shakiemsaunders.wickedTweetsApp.fragments.HomeTimeLineFragment;
+import com.shakiemsaunders.wickedTweetsApp.fragments.MentionsTimeLineFragment;
 import com.shakiemsaunders.wickedTweetsApp.models.Tweet;
 import com.shakiemsaunders.wickedTweetsApp.models.User;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 public class TimeLineActivity extends AppCompatActivity {
     private TwitterClient client;
-    private List<Tweet> tweets;
-    private TweetsArrayAdapter tweetsAdapter;
-    private ListView timeLineListView;
+    private ViewPager viewPager;
+    private PagerSlidingTabStrip tabStrip;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +43,19 @@ public class TimeLineActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.tweetToolbar);
         setSupportActionBar(toolbar);
 
-        timeLineListView = (ListView)findViewById(R.id.timeLineListView);
-        tweets = new ArrayList<>();
-        tweetsAdapter = new TweetsArrayAdapter(this, tweets);
-        timeLineListView.setAdapter(tweetsAdapter);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+
+        tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(viewPager);
+
         client = TwitterApplication.getRestClient();
-        populateTimeLine();
-
-        timeLineListView.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-
-                loadMoreTweets(totalItemsCount);
-
-                return true; // ONLY if more data is actually being loaded; false otherwise.
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_time_line, menu);
-
         return true;
     }
 
@@ -77,28 +69,11 @@ public class TimeLineActivity extends AppCompatActivity {
             case R.id.action_compose_tweet:
                 showEditDialog();
                 return true;
+            case R.id.action_profile:
+                showProile();
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void populateTimeLine(){
-        client.getHomeTimeLine(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                List<Tweet> newTweets = Tweet.parseListFromJSONArray(response);
-                //you can check from empty list here and do what you want...
-                if(newTweets.isEmpty())
-                    Toast.makeText(getApplicationContext(), "Could not load new tweets...", Toast.LENGTH_SHORT).show();
-
-                tweetsAdapter.addAll(newTweets);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TimeLineActivity.this, errorResponse.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void showEditDialog() {
@@ -132,42 +107,52 @@ public class TimeLineActivity extends AppCompatActivity {
 
     }
 
+    private void showProile(){
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     public void updateTimeLine(Tweet tweet){
         if(tweet == null)
             return;
         else {
-            tweets.add(0, tweet);
-            tweetsAdapter.notifyDataSetChanged();
-        }
-
-
-    }
-
-    private void loadMoreTweets(int totalItemsCount){
-        Tweet tweet = tweets.get(totalItemsCount - 1);
-        long id = tweet.getId();
-        long lastValidId = Long.MAX_VALUE;
-        if(id < 0 ) { //workaround where some ids were coming back as negatives...
-            for (Tweet tweet1 : tweets) {
-                if(tweet1.getId() > 0)
-                    lastValidId = tweet1.getId();
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            for (Fragment fragment : fragments) {
+                if(fragment instanceof HomeTimeLineFragment){
+                    ((HomeTimeLineFragment)fragment).updateTimeLine(tweet);
+                    break;
+                }
             }
         }
-        client.getMoreTweets(lastValidId, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                List<Tweet> newTweets = Tweet.parseListFromJSONArray(response);
-                //you can check from empty list here and do what you want...
-                if(newTweets.isEmpty())
-                    Toast.makeText(getApplicationContext(), "Could not load new tweets...", Toast.LENGTH_SHORT).show();
-
-                tweetsAdapter.addAll(newTweets);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TimeLineActivity.this, errorResponse.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
+    //returns the order of the fragments in the viewPager
+    public class TweetsPagerAdapter extends FragmentPagerAdapter{
+        private String tabTitles[] = {"Home", "Mentions"};
+
+        public TweetsPagerAdapter(FragmentManager manager){
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if(position == 0)
+                return new HomeTimeLineFragment();
+            else if (position == 1){
+                return new MentionsTimeLineFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+    }
+
 }

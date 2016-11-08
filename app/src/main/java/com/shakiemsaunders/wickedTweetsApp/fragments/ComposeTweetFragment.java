@@ -45,15 +45,11 @@ public class ComposeTweetFragment extends DialogFragment  {
     private TextView charsLeft;
     private User user;
 
-
-
     public ComposeTweetFragment() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
-
-
 
     public static ComposeTweetFragment newInstance(User user) {
         ComposeTweetFragment frag = new ComposeTweetFragment();
